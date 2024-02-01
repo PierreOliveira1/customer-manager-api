@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { FindOneCustomerUseCase } from './find-one-customer.use-case';
 import { DatabaseService } from 'src/database/database.service';
-import { vitest } from 'vitest';
-import { BadRequestException } from '@nestjs/common';
+import { beforeEach, describe, expect, it, vitest } from 'vitest';
+import { NotFoundException } from '@nestjs/common';
 
 describe('FindOneCustomerUseCase', () => {
 	let findOneCustomerUseCase: FindOneCustomerUseCase;
@@ -59,13 +59,13 @@ describe('FindOneCustomerUseCase', () => {
 		expect(databaseService.getPool).toHaveBeenCalled();
 	});
 
-	it('should throw BadRequestException if customer is not found', async () => {
+	it('should throw NotFoundException if customer is not found', async () => {
 		const customerId = 'nonExistingCustomerId';
 
 		queryMock.mockReturnValueOnce({ rows: [] });
 
 		expect(findOneCustomerUseCase.execute(customerId)).rejects.toThrow(
-			new BadRequestException({
+			new NotFoundException({
 				message: 'Cliente não encontrado.',
 			}),
 		);

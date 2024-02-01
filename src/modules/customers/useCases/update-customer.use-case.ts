@@ -18,12 +18,12 @@ export class UpdateCustomerUseCase {
 		try {
 			await pool.query('BEGIN');
 
-			const userExists = await pool.query(
+			const customerExists = await pool.query(
 				'SELECT id FROM customers c WHERE c.id = $1',
 				[id],
 			);
 
-			if (userExists.rows.length === 0) {
+			if (customerExists.rows.length === 0) {
 				throw new NotFoundException({
 					message: 'Cliente não encontrado!',
 				});

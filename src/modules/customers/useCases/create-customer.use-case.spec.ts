@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CreateCustomerUseCase } from './create-customer.use-case';
 import { DatabaseService } from 'src/database/database.service';
-import { vitest } from 'vitest';
+import { beforeEach, describe, expect, it, vitest } from 'vitest';
 
 describe('CreateCustomerUseCase', () => {
 	let createCustomerUseCase: CreateCustomerUseCase;

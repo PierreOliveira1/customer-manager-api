@@ -4,6 +4,7 @@ import { CreateCustomerDto } from './dtos/create-customer.dto';
 import { UpdateCustomerUseCase } from './useCases/update-customer.use-case';
 import { UpdateCustomerDto } from './dtos/update-customer.dto';
 import { FindOneCustomerUseCase } from './useCases/find-one-customer.use-case';
+import { DeleteCustomerUseCase } from './useCases/delete-customer.use-case';
 
 @Injectable()
 export class CustomersService {
@@ -11,6 +12,7 @@ export class CustomersService {
 		private readonly createCustomerUseCase: CreateCustomerUseCase,
 		private readonly updateCustomerUseCase: UpdateCustomerUseCase,
 		private readonly findOneCustomerUseCase: FindOneCustomerUseCase,
+		private readonly deleteCustomerUseCase: DeleteCustomerUseCase,
 	) {}
 
 	create(data: CreateCustomerDto) {
@@ -23,5 +25,9 @@ export class CustomersService {
 
 	findOne(id: string) {
 		return this.findOneCustomerUseCase.execute(id);
+	}
+
+	delete(id: string) {
+		return this.deleteCustomerUseCase.execute(id);
 	}
 }

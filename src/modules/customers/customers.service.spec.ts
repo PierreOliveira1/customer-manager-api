@@ -2,16 +2,18 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { CustomersService } from './customers.service';
 import { CreateCustomerUseCase } from './useCases/create-customer.use-case';
 import { CreateCustomerDto } from './dtos/create-customer.dto';
-import { vitest } from 'vitest';
+import { beforeEach, describe, expect, it, vitest } from 'vitest';
 import { UpdateCustomerUseCase } from './useCases/update-customer.use-case';
 import { FindOneCustomerUseCase } from './useCases/find-one-customer.use-case';
 import { UpdateCustomerDto } from './dtos/update-customer.dto';
+import { DeleteCustomerUseCase } from './useCases/delete-customer.use-case';
 
 describe('CustomersService', () => {
 	let customersService: CustomersService;
 	let createCustomerUseCase: CreateCustomerUseCase;
 	let updateCustomerUseCase: UpdateCustomerUseCase;
 	let findOneCustomerUseCase: FindOneCustomerUseCase;
+	let deleteCustomerUseCase: DeleteCustomerUseCase;
 
 	beforeEach(async () => {
 		const module: TestingModule = await Test.createTestingModule({
@@ -40,6 +42,14 @@ describe('CustomersService', () => {
 						}),
 					}),
 				},
+				{
+					provide: DeleteCustomerUseCase,
+					useFactory: () => ({
+						execute: vitest.fn().mockReturnValue({
+							message: 'Cliente deletado com sucesso.',
+						}),
+					}),
+				},
 			],
 		}).compile();
 
@@ -52,6 +62,9 @@ describe('CustomersService', () => {
 		);
 		findOneCustomerUseCase = module.get<FindOneCustomerUseCase>(
 			FindOneCustomerUseCase,
+		);
+		deleteCustomerUseCase = module.get<DeleteCustomerUseCase>(
+			DeleteCustomerUseCase,
 		);
 	});
 
@@ -77,7 +90,7 @@ describe('CustomersService', () => {
 
 	describe('update', () => {
 		it('should call updateCustomerUseCase.execute with the provided data', () => {
-			const createCustomerDto: UpdateCustomerDto = {
+			const updateCustomerDto: UpdateCustomerDto = {
 				name: 'Pierre Oliveira',
 				email: 'pierre@gmail.com',
 				phoneNumber: '77777777777',
@@ -85,11 +98,11 @@ describe('CustomersService', () => {
 
 			const id = '123123';
 
-			customersService.update(id, createCustomerDto);
+			customersService.update(id, updateCustomerDto);
 
 			expect(updateCustomerUseCase.execute).toHaveBeenCalledWith(
 				id,
-				createCustomerDto,
+				updateCustomerDto,
 			);
 		});
 	});
@@ -107,6 +120,17 @@ describe('CustomersService', () => {
 				email: 'pierre@gmail.com',
 				phoneNumber: '77777777777',
 			});
+		});
+	});
+
+	describe('delete', () => {
+		it('should call deleteCustomerUseCase.execute with the provided data', async () => {
+			const id = '123123';
+
+			const result = await customersService.delete(id);
+
+			expect(deleteCustomerUseCase.execute).toHaveBeenCalledWith(id);
+			expect(result.message).toBe('Cliente deletado com sucesso.');
 		});
 	});
 });

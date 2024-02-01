@@ -2,10 +2,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UpdateCustomerUseCase } from './update-customer.use-case';
 import { DatabaseService } from 'src/database/database.service';
 import { UpdateCustomerDto } from '../dtos/update-customer.dto';
-import { vitest } from 'vitest';
+import { beforeEach, describe, expect, it, vitest } from 'vitest';
 import {
 	BadRequestException,
 	InternalServerErrorException,
+	NotFoundException,
 } from '@nestjs/common';
 import { DatabaseError } from 'pg';
 
@@ -98,7 +99,7 @@ describe('UpdateCustomerUseCase', () => {
 		);
 	});
 
-	it('should throw BadRequestException if customer does not exist', async () => {
+	it('should throw NotFoundException if customer does not exist', async () => {
 		const updateCustomerDto: UpdateCustomerDto = {
 			name: 'Updated Name',
 			email: 'updated.email@example.com',
@@ -117,7 +118,7 @@ describe('UpdateCustomerUseCase', () => {
 		expect(
 			updateCustomerUseCase.execute(customerId, updateCustomerDto),
 		).rejects.toThrow(
-			new BadRequestException({
+			new NotFoundException({
 				message: 'Cliente não encontrado!',
 			}),
 		);

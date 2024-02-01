@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+	Body,
+	Controller,
+	Delete,
+	Get,
+	Param,
+	Patch,
+	Post,
+} from '@nestjs/common';
 import { CustomersService } from './customers.service';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateCustomerDto } from './dtos/create-customer.dto';
@@ -25,5 +33,10 @@ export class CustomersController {
 	@Get(':customerId')
 	findOne(@Param('customerId') customerId: string) {
 		return this.customersService.findOne(customerId);
+	}
+
+	@Delete(':customerId')
+	delete(@Param('customerId') customerId: string) {
+		return this.customersService.delete(customerId);
 	}
 }

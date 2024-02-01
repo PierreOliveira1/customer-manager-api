@@ -5,34 +5,39 @@ import {
 } from '@nestjs/common';
 import { DatabaseError } from 'pg';
 import { DatabaseService } from 'src/database/database.service';
-import { Customer } from '../entities/customer.entity';
 
 @Injectable()
-export class FindOneCustomerUseCase {
+export class DeleteCustomerUseCase {
 	constructor(private readonly db: DatabaseService) {}
 
 	async execute(id: string) {
 		const pool = this.db.getPool();
 
 		try {
-			const result = await pool.query<Customer>(
-				'SELECT id, name, email, phone_number as "phoneNumber" FROM customers c WHERE c.id = $1',
+			await pool.query('BEGIN');
+
+			const customerAlreadyExists = await pool.query(
+				'SELECT * FROM customers c WHERE c.id = $1',
 				[id],
 			);
 
-			if (result.rows.length === 0) {
+			if (customerAlreadyExists.rows.length === 0) {
 				throw new NotFoundException({
 					message: 'Cliente não encontrado.',
 				});
 			}
 
-			const customer = result.rows[0];
+			await pool.query('DELETE FROM customers c WHERE c.id = $1', [id]);
 
-			return customer;
+			await pool.query('COMMIT');
+			return {
+				message: 'Cliente deletado com sucesso.',
+			};
 		} catch (err) {
+			await pool.query('ROLLBACK');
 			if (err instanceof DatabaseError) {
 				throw new InternalServerErrorException({
-					message: 'Erro ao buscar cliente.',
+					message: 'Erro ao deletar cliente.',
 				});
 			}
 
