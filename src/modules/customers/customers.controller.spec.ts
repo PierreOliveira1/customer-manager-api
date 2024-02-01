@@ -3,6 +3,7 @@ import { CustomersController } from './customers.controller';
 import { CustomersService } from './customers.service';
 import { CreateCustomerDto } from './dtos/create-customer.dto';
 import { beforeEach, describe, expect, it, vitest } from 'vitest';
+import { Pagination } from 'src/miscs/entities';
 
 describe('CustomersController', () => {
 	let customersController: CustomersController;
@@ -17,6 +18,17 @@ describe('CustomersController', () => {
 					useFactory: () => ({
 						create: vitest.fn(),
 						update: vitest.fn(),
+						findAll: vitest.fn().mockReturnValueOnce(
+							new Pagination(
+								Array.from({ length: 10 }).map(() => ({
+									id: '1234',
+									name: 'Pierre Oliveira',
+									email: 'pierre@gmail.com',
+									phoneNumber: '77777777777',
+								})),
+								{ limit: 10, page: 1, total: 10 },
+							),
+						),
 						findOne: vitest.fn().mockReturnValueOnce({
 							id: '1234',
 							name: 'Pierre Oliveira',
@@ -37,6 +49,27 @@ describe('CustomersController', () => {
 
 	it('should be defined', () => {
 		expect(customersController).toBeDefined();
+	});
+
+	describe('findAll', () => {
+		it('should call customersService.findAll with the provided data', async () => {
+			const queries = { page: '1', limit: '10' };
+
+			const result = await customersController.findAll(queries);
+
+			expect(customersService.findAll).toHaveBeenCalledWith(queries);
+			expect(result).toEqual(
+				new Pagination(
+					Array.from({ length: 10 }).map(() => ({
+						id: '1234',
+						name: 'Pierre Oliveira',
+						email: 'pierre@gmail.com',
+						phoneNumber: '77777777777',
+					})),
+					{ limit: 10, page: 1, total: 10 },
+				),
+			);
+		});
 	});
 
 	describe('create', () => {

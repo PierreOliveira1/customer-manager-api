@@ -5,15 +5,25 @@ import { UpdateCustomerUseCase } from './useCases/update-customer.use-case';
 import { UpdateCustomerDto } from './dtos/update-customer.dto';
 import { FindOneCustomerUseCase } from './useCases/find-one-customer.use-case';
 import { DeleteCustomerUseCase } from './useCases/delete-customer.use-case';
+import { QueriesDto } from 'src/miscs/dtos';
+import { FindAllCustomersUseCase } from './useCases/find-all-customers.use-case';
 
 @Injectable()
 export class CustomersService {
 	constructor(
+		private readonly findAllCustomersUseCase: FindAllCustomersUseCase,
 		private readonly createCustomerUseCase: CreateCustomerUseCase,
 		private readonly updateCustomerUseCase: UpdateCustomerUseCase,
 		private readonly findOneCustomerUseCase: FindOneCustomerUseCase,
 		private readonly deleteCustomerUseCase: DeleteCustomerUseCase,
 	) {}
+
+	findAll(queries: QueriesDto) {
+		return this.findAllCustomersUseCase.execute({
+			limit: +queries.limit,
+			page: +queries.page,
+		});
+	}
 
 	create(data: CreateCustomerDto) {
 		return this.createCustomerUseCase.execute(data);

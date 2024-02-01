@@ -7,9 +7,12 @@ import { UpdateCustomerUseCase } from './useCases/update-customer.use-case';
 import { FindOneCustomerUseCase } from './useCases/find-one-customer.use-case';
 import { UpdateCustomerDto } from './dtos/update-customer.dto';
 import { DeleteCustomerUseCase } from './useCases/delete-customer.use-case';
+import { FindAllCustomersUseCase } from './useCases/find-all-customers.use-case';
+import { Pagination } from 'src/miscs/entities';
 
 describe('CustomersService', () => {
 	let customersService: CustomersService;
+	let findAllCustomersUseCase: FindAllCustomersUseCase;
 	let createCustomerUseCase: CreateCustomerUseCase;
 	let updateCustomerUseCase: UpdateCustomerUseCase;
 	let findOneCustomerUseCase: FindOneCustomerUseCase;
@@ -19,6 +22,22 @@ describe('CustomersService', () => {
 		const module: TestingModule = await Test.createTestingModule({
 			providers: [
 				CustomersService,
+				{
+					provide: FindAllCustomersUseCase,
+					useFactory: () => ({
+						execute: vitest.fn().mockReturnValueOnce(
+							new Pagination(
+								Array.from({ length: 10 }).map(() => ({
+									id: '1234',
+									name: 'Pierre Oliveira',
+									email: 'pierre@gmail.com',
+									phoneNumber: '77777777777',
+								})),
+								{ limit: 10, page: 1, total: 10 },
+							),
+						),
+					}),
+				},
 				{
 					provide: CreateCustomerUseCase,
 					useFactory: () => ({
@@ -54,6 +73,9 @@ describe('CustomersService', () => {
 		}).compile();
 
 		customersService = module.get<CustomersService>(CustomersService);
+		findAllCustomersUseCase = module.get<FindAllCustomersUseCase>(
+			FindAllCustomersUseCase,
+		);
 		createCustomerUseCase = module.get<CreateCustomerUseCase>(
 			CreateCustomerUseCase,
 		);
@@ -70,6 +92,30 @@ describe('CustomersService', () => {
 
 	it('should be defined', () => {
 		expect(customersService).toBeDefined();
+	});
+
+	describe('findAll', () => {
+		it('should call findAllCustomersUseCase.execute with the provided data', async () => {
+			const queries = { limit: '10', page: '1' };
+
+			const result = await customersService.findAll(queries);
+
+			expect(findAllCustomersUseCase.execute).toHaveBeenCalledWith({
+				page: +queries.page,
+				limit: +queries.limit,
+			});
+			expect(result).toEqual(
+				new Pagination(
+					Array.from({ length: 10 }).map(() => ({
+						id: '1234',
+						name: 'Pierre Oliveira',
+						email: 'pierre@gmail.com',
+						phoneNumber: '77777777777',
+					})),
+					{ limit: 10, page: 1, total: 10 },
+				),
+			);
+		});
 	});
 
 	describe('create', () => {
@@ -107,7 +153,7 @@ describe('CustomersService', () => {
 		});
 	});
 
-	describe('update', () => {
+	describe('findOne', () => {
 		it('should call findOneCustomerUseCase.execute with the provided data', async () => {
 			const id = '123123';
 
