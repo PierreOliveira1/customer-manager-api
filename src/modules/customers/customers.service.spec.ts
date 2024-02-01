@@ -4,11 +4,14 @@ import { CreateCustomerUseCase } from './useCases/create-customer.use-case';
 import { CreateCustomerDto } from './dtos/create-customer.dto';
 import { vitest } from 'vitest';
 import { UpdateCustomerUseCase } from './useCases/update-customer.use-case';
+import { FindOneCustomerUseCase } from './useCases/find-one-customer.use-case';
+import { UpdateCustomerDto } from './dtos/update-customer.dto';
 
 describe('CustomersService', () => {
 	let customersService: CustomersService;
 	let createCustomerUseCase: CreateCustomerUseCase;
 	let updateCustomerUseCase: UpdateCustomerUseCase;
+	let findOneCustomerUseCase: FindOneCustomerUseCase;
 
 	beforeEach(async () => {
 		const module: TestingModule = await Test.createTestingModule({
@@ -26,6 +29,17 @@ describe('CustomersService', () => {
 						execute: vitest.fn(),
 					}),
 				},
+				{
+					provide: FindOneCustomerUseCase,
+					useFactory: () => ({
+						execute: vitest.fn().mockReturnValueOnce({
+							id: '1234',
+							name: 'Pierre Oliveira',
+							email: 'pierre@gmail.com',
+							phoneNumber: '77777777777',
+						}),
+					}),
+				},
 			],
 		}).compile();
 
@@ -35,6 +49,9 @@ describe('CustomersService', () => {
 		);
 		updateCustomerUseCase = module.get<UpdateCustomerUseCase>(
 			UpdateCustomerUseCase,
+		);
+		findOneCustomerUseCase = module.get<FindOneCustomerUseCase>(
+			FindOneCustomerUseCase,
 		);
 	});
 
@@ -60,10 +77,10 @@ describe('CustomersService', () => {
 
 	describe('update', () => {
 		it('should call updateCustomerUseCase.execute with the provided data', () => {
-			const createCustomerDto: CreateCustomerDto = {
-				name: 'John Doe',
-				email: 'john@example.com',
-				phoneNumber: '123456789',
+			const createCustomerDto: UpdateCustomerDto = {
+				name: 'Pierre Oliveira',
+				email: 'pierre@gmail.com',
+				phoneNumber: '77777777777',
 			};
 
 			const id = '123123';
@@ -74,6 +91,22 @@ describe('CustomersService', () => {
 				id,
 				createCustomerDto,
 			);
+		});
+	});
+
+	describe('update', () => {
+		it('should call findOneCustomerUseCase.execute with the provided data', async () => {
+			const id = '123123';
+
+			const result = await customersService.findOne(id);
+
+			expect(findOneCustomerUseCase.execute).toHaveBeenCalledWith(id);
+			expect(result).toEqual({
+				id: '1234',
+				name: 'Pierre Oliveira',
+				email: 'pierre@gmail.com',
+				phoneNumber: '77777777777',
+			});
 		});
 	});
 });

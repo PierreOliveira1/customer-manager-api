@@ -2,6 +2,7 @@ import {
 	BadRequestException,
 	Injectable,
 	InternalServerErrorException,
+	NotFoundException,
 } from '@nestjs/common';
 import { DatabaseError } from 'pg';
 import { UpdateCustomerDto } from '../dtos/update-customer.dto';
@@ -23,7 +24,7 @@ export class UpdateCustomerUseCase {
 			);
 
 			if (userExists.rows.length === 0) {
-				throw new BadRequestException({
+				throw new NotFoundException({
 					message: 'Cliente não encontrado!',
 				});
 			}
