@@ -12,10 +12,20 @@ async function bootstrap() {
 		.setVersion('1.0')
 		.build();
 
+	app.enableCors({
+		origin: process.env.ORIGINS,
+	});
+
 	const document = SwaggerModule.createDocument(app, config);
 	SwaggerModule.setup('api-docs', app, document);
 
-	app.useGlobalPipes(new ValidationPipe());
+	app.useGlobalPipes(
+		new ValidationPipe({
+			stopAtFirstError: true,
+			transform: true,
+			whitelist: true,
+		}),
+	);
 
 	await app.listen(3000);
 }
