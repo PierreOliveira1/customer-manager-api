@@ -32,6 +32,21 @@
 $ pnpm install
 ```
 
+## Avisos
+Antes de iniciar a aplicação deve-se colocar a uri do banco de dados e origins na env assim como está no modelo `.env.example`.
+
+## Criação das tabelas no banco
+```sql
+  CREATE TABLE customers (
+  	id UUID PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    phone_number VARCHAR(20),
+    coordinate_x FLOAT NOT NULL,
+    coordinate_y FLOAT NOT NULL
+  )
+```
+
 ## Running the app
 
 ```bash
