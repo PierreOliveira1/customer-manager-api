@@ -52,7 +52,9 @@ describe('FindAllCustomerUseCase', () => {
 			})
 			.mockReturnValueOnce({ rows: [{ total: '10' }] });
 
-		const results = await findAllCustomersUseCase.execute(queries);
+		const results = await findAllCustomersUseCase.execute(queries, {
+			search: null,
+		});
 
 		expect(results.data.length).toBe(10);
 		expect(results.pagination.currentPage).toBe(1);
@@ -77,7 +79,9 @@ describe('FindAllCustomerUseCase', () => {
 			})
 			.mockRejectedValueOnce(new DatabaseError('Error', 1, 'error'));
 
-		expect(findAllCustomersUseCase.execute(queries)).rejects.toThrow(
+		expect(
+			findAllCustomersUseCase.execute(queries, { search: null }),
+		).rejects.toThrow(
 			new InternalServerErrorException({
 				message: 'Erro ao buscar clientes.',
 			}),

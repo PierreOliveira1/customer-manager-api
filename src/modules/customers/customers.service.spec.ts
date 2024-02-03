@@ -98,12 +98,15 @@ describe('CustomersService', () => {
 		it('should call findAllCustomersUseCase.execute with the provided data', async () => {
 			const queries = { limit: '10', page: '1' };
 
-			const result = await customersService.findAll(queries);
+			const result = await customersService.findAll(queries, { search: null });
 
-			expect(findAllCustomersUseCase.execute).toHaveBeenCalledWith({
-				page: +queries.page,
-				limit: +queries.limit,
-			});
+			expect(findAllCustomersUseCase.execute).toHaveBeenCalledWith(
+				{
+					page: +queries.page,
+					limit: +queries.limit,
+				},
+				{ search: null },
+			);
 			expect(result).toEqual(
 				new Pagination(
 					Array.from({ length: 10 }).map(() => ({

@@ -12,7 +12,7 @@ import { CustomersService } from './customers.service';
 import { ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateCustomerDto } from './dtos/create-customer.dto';
 import { UpdateCustomerDto } from './dtos/update-customer.dto';
-import { QueriesDto } from 'src/miscs/dtos';
+import { FiltersDto, QueriesDto } from 'src/miscs/dtos';
 import { ErrorResponse, FindAllResponse } from './docs/responses';
 import { Customer } from './entities/customer.entity';
 
@@ -26,8 +26,8 @@ export class CustomersController {
 	@ApiResponse({ status: 200, type: FindAllResponse })
 	@ApiResponse({ status: 500, type: ErrorResponse })
 	@Get()
-	findAll(@Query() queries: QueriesDto) {
-		return this.customersService.findAll(queries);
+	findAll(@Query() queries: QueriesDto, @Query() filters: FiltersDto) {
+		return this.customersService.findAll(queries, filters);
 	}
 
 	@ApiResponse({ status: 200, type: ErrorResponse })

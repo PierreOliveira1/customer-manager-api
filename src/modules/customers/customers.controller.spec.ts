@@ -55,9 +55,13 @@ describe('CustomersController', () => {
 		it('should call customersService.findAll with the provided data', async () => {
 			const queries = { page: '1', limit: '10' };
 
-			const result = await customersController.findAll(queries);
+			const result = await customersController.findAll(queries, {
+				search: null,
+			});
 
-			expect(customersService.findAll).toHaveBeenCalledWith(queries);
+			expect(customersService.findAll).toHaveBeenCalledWith(queries, {
+				search: null,
+			});
 			expect(result).toEqual(
 				new Pagination(
 					Array.from({ length: 10 }).map(() => ({
