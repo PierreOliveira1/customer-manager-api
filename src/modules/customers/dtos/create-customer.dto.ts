@@ -5,7 +5,9 @@ import {
 	IsNumberString,
 	IsOptional,
 	IsString,
+	Max,
 	MaxLength,
+	Min,
 	MinLength,
 } from 'class-validator';
 
@@ -33,13 +35,13 @@ export class CreateCustomerDto {
 
 	@ApiProperty()
 	@IsNumber()
-	@MinLength(1)
-	@MaxLength(1000000)
+	@Min(1)
+	@Max(1000000)
 	coordinateX: number;
 
 	@ApiProperty()
 	@IsNumber()
-	@MinLength(1)
-	@MaxLength(1000000)
+	@Min(1)
+	@Max(1000000)
 	coordinateY: number;
 }

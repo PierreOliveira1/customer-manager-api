@@ -5,7 +5,9 @@ import {
 	IsNumberString,
 	IsOptional,
 	IsString,
+	Max,
 	MaxLength,
+	Min,
 	MinLength,
 } from 'class-validator';
 
@@ -36,14 +38,14 @@ export class UpdateCustomerDto {
 	@ApiPropertyOptional()
 	@IsOptional()
 	@IsNumber()
-	@MinLength(1)
-	@MaxLength(1000000)
+	@Min(1)
+	@Max(1000000)
 	coordinateX?: number;
 
 	@ApiPropertyOptional()
 	@IsOptional()
 	@IsNumber()
-	@MinLength(1)
-	@MaxLength(1000000)
+	@Min(1)
+	@Max(1000000)
 	coordinateY?: number;
 }
