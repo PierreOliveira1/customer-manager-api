@@ -35,7 +35,8 @@ $ pnpm install
 ## Avisos
 Antes de iniciar a aplicação deve-se colocar a uri do banco de dados e origins na env assim como está no modelo `.env.example`.
 
-## Criação das tabelas no banco
+## Criação das tabelas no banco de dados (Postgres)
+Postgres versão 16.
 ```sql
   CREATE TABLE customers (
   	id UUID PRIMARY KEY,
