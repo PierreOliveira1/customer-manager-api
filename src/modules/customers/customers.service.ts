@@ -7,6 +7,7 @@ import { FindOneCustomerUseCase } from './useCases/find-one-customer.use-case';
 import { DeleteCustomerUseCase } from './useCases/delete-customer.use-case';
 import { FiltersDto, QueriesDto } from 'src/miscs/dtos';
 import { FindAllCustomersUseCase } from './useCases/find-all-customers.use-case';
+import { FindRoutesCustomersUseCase } from './useCases/find-routes-customers.use-case';
 
 @Injectable()
 export class CustomersService {
@@ -16,6 +17,7 @@ export class CustomersService {
 		private readonly updateCustomerUseCase: UpdateCustomerUseCase,
 		private readonly findOneCustomerUseCase: FindOneCustomerUseCase,
 		private readonly deleteCustomerUseCase: DeleteCustomerUseCase,
+		private readonly findRoutesCustomersUseCase: FindRoutesCustomersUseCase,
 	) {}
 
 	findAll(queries: QueriesDto, { search }: FiltersDto) {
@@ -28,6 +30,9 @@ export class CustomersService {
 		);
 	}
 
+	findRoute() {
+		return this.findRoutesCustomersUseCase.execute();
+	}
 	create(data: CreateCustomerDto) {
 		return this.createCustomerUseCase.execute(data);
 	}

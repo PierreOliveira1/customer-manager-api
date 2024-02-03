@@ -30,6 +30,13 @@ export class CustomersController {
 		return this.customersService.findAll(queries, filters);
 	}
 
+	@ApiResponse({ status: 200, type: FindAllResponse })
+	@ApiResponse({ status: 500, type: ErrorResponse })
+	@Get('route')
+	findRoute() {
+		return this.customersService.findRoute();
+	}
+
 	@ApiResponse({ status: 200, type: ErrorResponse })
 	@ApiResponse({ status: 500, type: ErrorResponse })
 	@Post()

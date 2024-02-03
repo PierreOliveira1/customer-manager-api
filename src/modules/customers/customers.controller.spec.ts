@@ -29,6 +29,14 @@ describe('CustomersController', () => {
 								{ limit: 10, page: 1, total: 10 },
 							),
 						),
+						findRoute: vitest.fn().mockReturnValueOnce(
+							Array.from({ length: 10 }).map(() => ({
+								id: '1234',
+								name: 'Pierre Oliveira',
+								email: 'pierre@gmail.com',
+								phoneNumber: '77777777777',
+							})),
+						),
 						findOne: vitest.fn().mockReturnValueOnce({
 							id: '1234',
 							name: 'Pierre Oliveira',
@@ -76,12 +84,30 @@ describe('CustomersController', () => {
 		});
 	});
 
+	describe('findRoute', () => {
+		it('should call customersService.findRoute with the provided data', async () => {
+			const result = await customersController.findRoute();
+
+			expect(customersService.findRoute).toHaveBeenCalledTimes(1);
+			expect(result).toEqual(
+				Array.from({ length: 10 }).map(() => ({
+					id: '1234',
+					name: 'Pierre Oliveira',
+					email: 'pierre@gmail.com',
+					phoneNumber: '77777777777',
+				})),
+			);
+		});
+	});
+
 	describe('create', () => {
 		it('should call customersService.create with the provided data', () => {
 			const createCustomerDto: CreateCustomerDto = {
 				name: 'Pierre Oliveira',
 				email: 'pierre@gmail.com',
 				phoneNumber: '77777777777',
+				coordinateX: 0,
+				coordinateY: 2,
 			};
 
 			customersController.create(createCustomerDto);
@@ -96,6 +122,8 @@ describe('CustomersController', () => {
 				name: 'Pierre Oliveira',
 				email: 'pierre@gmail.com',
 				phoneNumber: '77777777777',
+				coordinateX: 0,
+				coordinateY: 2,
 			};
 
 			const customerId = '2424';

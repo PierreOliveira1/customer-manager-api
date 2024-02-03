@@ -9,6 +9,7 @@ import { UpdateCustomerDto } from './dtos/update-customer.dto';
 import { DeleteCustomerUseCase } from './useCases/delete-customer.use-case';
 import { FindAllCustomersUseCase } from './useCases/find-all-customers.use-case';
 import { Pagination } from 'src/miscs/entities';
+import { FindRoutesCustomersUseCase } from './useCases/find-routes-customers.use-case';
 
 describe('CustomersService', () => {
 	let customersService: CustomersService;
@@ -17,6 +18,7 @@ describe('CustomersService', () => {
 	let updateCustomerUseCase: UpdateCustomerUseCase;
 	let findOneCustomerUseCase: FindOneCustomerUseCase;
 	let deleteCustomerUseCase: DeleteCustomerUseCase;
+	let findRoutesCustomersUseCase: FindRoutesCustomersUseCase;
 
 	beforeEach(async () => {
 		const module: TestingModule = await Test.createTestingModule({
@@ -35,6 +37,19 @@ describe('CustomersService', () => {
 								})),
 								{ limit: 10, page: 1, total: 10 },
 							),
+						),
+					}),
+				},
+				{
+					provide: FindRoutesCustomersUseCase,
+					useFactory: () => ({
+						execute: vitest.fn().mockReturnValueOnce(
+							Array.from({ length: 10 }).map(() => ({
+								id: '1234',
+								name: 'Pierre Oliveira',
+								email: 'pierre@gmail.com',
+								phoneNumber: '77777777777',
+							})),
 						),
 					}),
 				},
@@ -88,6 +103,9 @@ describe('CustomersService', () => {
 		deleteCustomerUseCase = module.get<DeleteCustomerUseCase>(
 			DeleteCustomerUseCase,
 		);
+		findRoutesCustomersUseCase = module.get<FindRoutesCustomersUseCase>(
+			FindRoutesCustomersUseCase,
+		);
 	});
 
 	it('should be defined', () => {
@@ -121,12 +139,30 @@ describe('CustomersService', () => {
 		});
 	});
 
+	describe('findRoutes', () => {
+		it('should call findRoutesCustomersUseCase.execute with the provided data', async () => {
+			const result = await customersService.findRoute();
+
+			expect(findRoutesCustomersUseCase.execute).toHaveBeenCalledTimes(1);
+			expect(result).toEqual(
+				Array.from({ length: 10 }).map(() => ({
+					id: '1234',
+					name: 'Pierre Oliveira',
+					email: 'pierre@gmail.com',
+					phoneNumber: '77777777777',
+				})),
+			);
+		});
+	});
+
 	describe('create', () => {
 		it('should call createCustomerUseCase.execute with the provided data', () => {
 			const createCustomerDto: CreateCustomerDto = {
 				name: 'John Doe',
 				email: 'john@example.com',
 				phoneNumber: '123456789',
+				coordinateX: 0,
+				coordinateY: 2,
 			};
 
 			customersService.create(createCustomerDto);
