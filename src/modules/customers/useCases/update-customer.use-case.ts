@@ -58,6 +58,16 @@ export class UpdateCustomerUseCase {
 				updateValues.push(data.phoneNumber);
 			}
 
+			if (data.coordinateX) {
+				updateColumns.push('coordinate_x');
+				updateValues.push(data.coordinateX);
+			}
+
+			if (data.coordinateY) {
+				updateColumns.push('coordinate_y');
+				updateValues.push(data.coordinateY);
+			}
+
 			if (updateColumns.length > 0) {
 				const setClause = updateColumns
 					.map((column, index) => `${column} = $${index + 1}`)

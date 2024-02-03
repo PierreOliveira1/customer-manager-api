@@ -12,4 +12,10 @@ export class Customer {
 
 	@ApiProperty()
 	phoneNumber: string;
+
+	@ApiProperty()
+	coordinateX: number;
+
+	@ApiProperty()
+	coordinateY: number;
 }

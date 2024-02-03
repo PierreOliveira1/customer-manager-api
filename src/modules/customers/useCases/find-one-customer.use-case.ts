@@ -16,7 +16,7 @@ export class FindOneCustomerUseCase {
 
 		try {
 			const result = await pool.query<Customer>(
-				'SELECT id, name, email, phone_number as "phoneNumber" FROM customers c WHERE c.id = $1',
+				'SELECT id, name, email, phone_number as "phoneNumber", coordinate_x AS "coordinateX", coordinate_y AS "coordinateY" FROM customers c WHERE c.id = $1',
 				[id],
 			);
 

@@ -18,7 +18,7 @@ export class FindAllCustomersUseCase {
 			const query: string[] = [];
 			const params: (number | string)[] = [];
 			query.push(
-				'SELECT id, name, email, phone_number AS "phoneNumber" FROM customers c',
+				'SELECT id, name, email, phone_number AS "phoneNumber", coordinate_x AS "coordinateX", coordinate_y AS "coordinateY" FROM customers c',
 			);
 
 			if (filters?.search) {

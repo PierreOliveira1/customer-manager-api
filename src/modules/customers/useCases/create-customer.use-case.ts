@@ -30,8 +30,15 @@ export class CreateCustomerUseCase {
 			}
 
 			await pool.query(
-				'INSERT INTO customers(id, name, email, phone_number) VALUES ($1, $2, $3, $4)',
-				[uuidv4(), data.name, data.email, data.phoneNumber],
+				'INSERT INTO customers(id, name, email, phone_number, coordinate_x, coordinate_y) VALUES ($1, $2, $3, $4, $5, $6)',
+				[
+					uuidv4(),
+					data.name,
+					data.email,
+					data.phoneNumber,
+					data.coordinateX,
+					data.coordinateY,
+				],
 			);
 
 			await pool.query('COMMIT');

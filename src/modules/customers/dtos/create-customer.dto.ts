@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
 	IsEmail,
+	IsNumber,
 	IsNumberString,
 	IsOptional,
 	IsString,
@@ -29,4 +30,16 @@ export class CreateCustomerDto {
 	@MaxLength(20)
 	@IsNumberString()
 	phoneNumber?: string;
+
+	@ApiProperty()
+	@IsNumber()
+	@MinLength(1)
+	@MaxLength(1000000)
+	coordinateX: number;
+
+	@ApiProperty()
+	@IsNumber()
+	@MinLength(1)
+	@MaxLength(1000000)
+	coordinateY: number;
 }

@@ -46,6 +46,8 @@ describe('FindOneCustomerUseCase', () => {
 					name: 'Pierre Oliveira',
 					email: 'pierre@gmail.com',
 					phoneNumber: '77777777777',
+					coordinateX: 1,
+					coordinateY: 2,
 				},
 			],
 		});

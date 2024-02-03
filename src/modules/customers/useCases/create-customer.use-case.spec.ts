@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { CreateCustomerUseCase } from './create-customer.use-case';
 import { DatabaseService } from 'src/database/database.service';
 import { beforeEach, describe, expect, it, vitest } from 'vitest';
+import { CreateCustomerDto } from '../dtos/create-customer.dto';
 
 describe('CreateCustomerUseCase', () => {
 	let createCustomerUseCase: CreateCustomerUseCase;
@@ -29,10 +30,12 @@ describe('CreateCustomerUseCase', () => {
 	});
 
 	it('should create a new customer successfully', async () => {
-		const createCustomerDto = {
+		const createCustomerDto: CreateCustomerDto = {
 			name: 'John Doe',
 			email: 'john@example.com',
 			phoneNumber: '123456789',
+			coordinateX: 1,
+			coordinateY: 2,
 		};
 
 		const result = await createCustomerUseCase.execute(createCustomerDto);
@@ -49,6 +52,8 @@ describe('CreateCustomerUseCase', () => {
 			name: 'John Doe',
 			email: 'john@example.com',
 			phoneNumber: '123456789',
+			coordinateX: 1,
+			coordinateY: 2,
 		};
 
 		expect(createCustomerUseCase.execute(createCustomerDto)).rejects.toThrow();
@@ -63,6 +68,8 @@ describe('CreateCustomerUseCase', () => {
 			name: 'John Doe',
 			email: 'john@example.com',
 			phoneNumber: '123456789',
+			coordinateX: 1,
+			coordinateY: 2,
 		};
 
 		expect(createCustomerUseCase.execute(createCustomerDto)).rejects.toThrow();

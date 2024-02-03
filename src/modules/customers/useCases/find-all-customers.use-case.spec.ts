@@ -48,6 +48,8 @@ describe('FindAllCustomerUseCase', () => {
 					name: 'Pierre Oliveira',
 					email: 'pierre@gmail.com',
 					phoneNumber: '77777777777',
+					coordinateX: 1,
+					coordinateY: 2,
 				})),
 			})
 			.mockReturnValueOnce({ rows: [{ total: '10' }] });
@@ -74,6 +76,8 @@ describe('FindAllCustomerUseCase', () => {
 						name: 'Pierre Oliveira',
 						email: 'pierre@gmail.com',
 						phoneNumber: '77777777777',
+						coordinateX: 1,
+						coordinateY: 2,
 					},
 				],
 			})

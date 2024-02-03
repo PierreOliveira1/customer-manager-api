@@ -79,6 +79,8 @@ describe('UpdateCustomerUseCase', () => {
 			name: 'Updated Name',
 			email: 'existing.email@example.com',
 			phoneNumber: '987654321',
+			coordinateX: 1,
+			coordinateY: 2,
 		};
 
 		const customerId = 'customerId';
@@ -104,6 +106,8 @@ describe('UpdateCustomerUseCase', () => {
 			name: 'Updated Name',
 			email: 'updated.email@example.com',
 			phoneNumber: '987654321',
+			coordinateX: 1,
+			coordinateY: 2,
 		};
 
 		const customerId = 'nonExistingCustomerId';
@@ -129,6 +133,8 @@ describe('UpdateCustomerUseCase', () => {
 			name: 'Updated Name',
 			email: 'updated.email@example.com',
 			phoneNumber: '987654321',
+			coordinateX: 1,
+			coordinateY: 2,
 		};
 
 		const customerId = 'customerId';
